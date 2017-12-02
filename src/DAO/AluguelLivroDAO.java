@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import br.com.triadworks.jdbc.ConnectionFactory;
 import model.AluguelLivro;
+import model.Aluno;
 
 
 public class AluguelLivroDAO {
@@ -187,6 +189,41 @@ public void deletar (AluguelLivro aluguelLivro) {
 	
 	
 }
+	
+	public List<AluguelLivro> getLista() {
+		List<AluguelLivro> aluguelLivros = new ArrayList<>();
+		try {
+			PreparedStatement stmt = conexao.prepareStatement("select * from "+NOME_TABELA);
+			
+			ResultSet result = stmt.executeQuery();
+			AluguelLivro aluguelLivro = null;
+			Calendar calendar = Calendar.getInstance();
+			Date dataInicial =null;
+			Date dataFinal = null;
+			while(result.next()) {
+				aluguelLivro = new AluguelLivro();
+				aluguelLivro.setCodigo(result.getLong("codigo"));
+				dataInicial =result.getDate("data_inicial");
+				dataFinal =result.getDate("data_final");
+				calendar.setTime(dataInicial);
+
+				aluguelLivro.setData_inicial(calendar);
+				
+				calendar.setTime(dataFinal);
+				
+				aluguelLivro.setData_final(calendar);
+				aluguelLivro.setCodigo(result.getLong("codigo_livro"));
+				aluguelLivro.setMatricula_aluno(result.getLong("matricula_aluno"));
+				aluguelLivro.setCodigo_funcionario(result.getLong("codigo_funcionario"));
+				
+				aluguelLivros.add(aluguelLivro);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return aluguelLivros;
+	}
 	
 	
 	

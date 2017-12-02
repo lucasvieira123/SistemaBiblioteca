@@ -145,7 +145,7 @@ public void salvar(Aluno aluno) {
 		}
 	}
 
-	public List<Aluno> listar() {
+	public List<Aluno> getLista() {
 		List<Aluno> alunos = new ArrayList<>();
 		try {
 			PreparedStatement stmt = conexao.prepareStatement("select * from "+NOME_TABELA);
@@ -208,7 +208,7 @@ public void salvar(Aluno aluno) {
 			try {
 				PreparedStatement preparedStatement = conexao.prepareStatement(sql);
 				
-				preparedStatement.setLong(0, matricula);
+				preparedStatement.setLong(1, matricula);
 				
 				preparedStatement.execute();
 				preparedStatement.close();
@@ -219,6 +219,45 @@ public void salvar(Aluno aluno) {
 				e.printStackTrace();
 			}
 			
+		}
+		
+		public Aluno getAluno (Long matricula) {
+			
+			String sql = "select * from "+NOME_TABELA+" where matricula=?";
+			Aluno aluno = new Aluno();
+			
+			try {
+				PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+				
+				preparedStatement.setLong(1, matricula);
+				
+				ResultSet result = preparedStatement.executeQuery();
+				
+				result.next();
+				
+				Calendar dataNascimentoCalendar = Calendar.getInstance();
+				
+				aluno.setNome(result.getString("nome"));
+				
+				dataNascimentoCalendar.setTime(result.getDate("data_nascimento"));
+				aluno.setData_nascimento(dataNascimentoCalendar);
+				
+				aluno.setEndereco(result.getString("endereco"));
+				
+				aluno.setMatricula(result.getLong("matricula"));
+				
+			
+				
+				preparedStatement.close();
+				conexao.close();
+				
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return aluno;
 		}
 	
 	

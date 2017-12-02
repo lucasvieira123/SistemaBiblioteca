@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -184,6 +185,29 @@ public void deletar (Funcionario funcionario) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public List<Funcionario> getLista() {
+		List<Funcionario> funcionarios = new ArrayList<>();
+		try {
+			PreparedStatement stmt = conexao.prepareStatement("select * from "+NOME_TABELA);
+			
+			ResultSet result = stmt.executeQuery();
+			Funcionario funcionario = null;
+			
+			while(result.next()) {
+				funcionario = new Funcionario();
+				
+				funcionario.setId(result.getLong("id"));
+				funcionario.setNome(result.getString("nome"));
+				
+				funcionarios.add(funcionario);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return funcionarios;
 	}
 	
 	

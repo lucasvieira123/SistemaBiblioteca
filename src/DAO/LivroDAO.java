@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+
 import br.com.triadworks.jdbc.ConnectionFactory;
 import model.Aluno;
 import model.Funcionario;
@@ -146,7 +148,7 @@ public void salvar(Livro livro){
 		}
 	}
 
-public List<Livro> listar() {
+public List<Livro> getLista() {
 	List<Livro> livros = new ArrayList<>();
 	try {
 		PreparedStatement stmt = conexao.prepareStatement("select * from "+NOME_TABELA);
@@ -220,7 +222,7 @@ public void deletar (Livro livro) {
 		try {
 			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
 			
-			preparedStatement.setLong(0, codigo);
+			preparedStatement.setLong(1, codigo);
 			
 			preparedStatement.execute();
 			preparedStatement.close();
@@ -230,6 +232,33 @@ public void deletar (Livro livro) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public Livro getLivro(Long codigo) {
+		String sql = "select * from "+NOME_TABELA+" where codigo = ?";
+	
+		Livro livro = new Livro();
+		try {
+			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+			preparedStatement.setLong(1, codigo);
+			ResultSet set = preparedStatement.executeQuery();
+			
+			set.next();
+		
+			livro.setCodigo(set.getLong("codigo"));
+			livro.setNome(set.getString("nome"));
+			livro.setAutor(set.getString("autor"));
+			livro.setEdicao(set.getString("edicao"));
+			livro.setEditora(set.getString("editora"));
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return livro;
 		
 	}
 	
