@@ -9,6 +9,7 @@ private long matricula_aluno;
 private long codigo_funcionario;
 private Calendar data_inicial;
 private Calendar data_final;
+
 public long getCodigo() {
 	return codigo;
 }

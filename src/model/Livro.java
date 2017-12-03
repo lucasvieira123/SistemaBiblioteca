@@ -7,6 +7,14 @@ private String nome;
 private String autor;
 private String edicao;
 private String editora;
+private Integer quantidadeExemplares;
+
+public Integer getQuantidadeExemplares() {
+	return quantidadeExemplares;
+}
+public void setQuantidadeExemplares(Integer quantidadeExemplares) {
+	this.quantidadeExemplares = quantidadeExemplares;
+}
 public long getCodigo() {
 	return codigo;
 }

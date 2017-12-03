@@ -12,6 +12,11 @@
 <title>Lista de alugueis livro</title>
 </head>
 <body>
+<div class="alert alert-danger">
+	<!-- Fiz com que a mensagem aparecesse na tela de listar livros -->
+	<font color="red" size = "05"><c:out value="${mensagem}"/></font>
+</div>
+
 <table border="1px">
 <p>Lista de alugueis livro</p>
 <tr>

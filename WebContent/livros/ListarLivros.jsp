@@ -20,6 +20,7 @@
 <td>Autor</td>
 <td>edição</td>
 <td>editora</td>
+<td>Quantidade Exemplares</td>
 </tr>
 <c:forEach var="livro" items="${dao.lista}">
 <tr>
@@ -28,6 +29,7 @@
 <td>${livro.autor}</td>
 <td>${livro.edicao}</td>
 <td>${livro.editora}</td>
+<td>${livro.quantidadeExemplares}
 <td>
 <form action="/SistemaBiblioteca/livros/atualizarLivro.jsp" method="get">
 <input type="hidden" name="codigo" value="${livro.codigo}"/>
