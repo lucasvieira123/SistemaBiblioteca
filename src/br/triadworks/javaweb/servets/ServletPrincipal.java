@@ -22,6 +22,7 @@ import exceptions.GeralException;
 import model.AluguelLivro;
 import model.Aluno;
 import model.Livro;
+import regras.CalculadorMulta;
 @WebServlet("/sistema")
 public class ServletPrincipal extends HttpServlet {
 
@@ -71,12 +72,33 @@ public class ServletPrincipal extends HttpServlet {
 		}else if(acao.equals("listarLivros")) {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("livros/ListarLivros.jsp");
 			requestDispatcher.forward(request, response);
+		}else if (acao.equals("devolverLivro")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("alugueis/DevolverLivro.jsp");
+			requestDispatcher.forward(request, response);
+		}else if (acao.equals("livroDevolvido")) {
+			String codigoLivro = String.valueOf(request.getParameter("codigo_livro"));
+			String matriculaAluno = String.valueOf(request.getParameter("matricula_aluno"));
+			
+			CalculadorMulta calculadorMulta = new CalculadorMulta(codigoLivro,matriculaAluno);
+			Long valordaMulta = calculadorMulta.calcular();
+			
+			request.setAttribute("valor", valordaMulta);
+			request.setAttribute("codigo", calculadorMulta.aluguelLivroRegistro.getCodigo());
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/comprovante.jsp");
+			requestDispatcher.forward(request, response);
+			AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
+			
+			aluguelLivroDAO.deletar(calculadorMulta.aluguelLivroRegistro);
+			
 		}
+		
+		
 		
 	
 
 		
 	}
+
 
 	private void adicionarAluguelLivro(HttpServletRequest request, HttpServletResponse response) throws ParseException, ServletException, IOException {
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

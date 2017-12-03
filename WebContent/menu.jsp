@@ -18,5 +18,7 @@
 
 <a href="sistema?acao=listarLivros">Listar funcionarios</a> </br></br>
 
+<a href="sistema?acao=devolverLivro">Devolver Livro</a> </br></br>
+
 </body>
 </html>

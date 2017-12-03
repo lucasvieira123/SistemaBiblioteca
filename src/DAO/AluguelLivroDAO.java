@@ -8,9 +8,12 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.triadworks.jdbc.ConnectionFactory;
 import model.AluguelLivro;
@@ -207,17 +210,29 @@ public void deletar (AluguelLivro aluguelLivro) {
 				aluguelLivro.setCodigo(result.getLong("codigo"));
 				dataInicial =result.getDate("data_inicial");
 				dataFinal =result.getDate("data_final");
+				
+				DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+			
 				calendar.setTime(dataInicial);
 
 				aluguelLivro.setData_inicial(calendar);
 				
+				System.out.println(df.format(aluguelLivro.getData_inicial().getTime()));
+				
 				calendar = Calendar.getInstance();
 				calendar.setTime(dataFinal);
 				
+			
 				aluguelLivro.setData_final(calendar);
+				System.out.println(df.format(aluguelLivro.getData_final().getTime()));
 				aluguelLivro.setMatricula_aluno(result.getLong("matricula_aluno"));
 				aluguelLivro.setCodigo_funcionario(result.getLong("codigo_funcionario"));
 				aluguelLivro.setCodigo_livro(result.getLong("codigo_livro"));
+				
+				
+				
+				
+		
 				
 				aluguelLivros.add(aluguelLivro);
 			}
@@ -242,13 +257,13 @@ public void deletar (AluguelLivro aluguelLivro) {
 	aluguelLivro.setCodigo(codigo);
 	aluguelLivro.setCodigo_funcionario(set.getLong("codigo_funcionario"));
 	aluguelLivro.setCodigo_livro(set.getLong("codigo_livro"));
-	
 	cal.setTime(set.getDate("data_final"));
 	aluguelLivro.setData_final(cal);
 	
 	cal = Calendar.getInstance();
 	
 	cal.setTime(set.getDate("data_inicial"));
+	System.out.println(set.getDate("data_inicial").getTime());
 	aluguelLivro.setData_inicial(cal);
 	aluguelLivro.setMatricula_aluno(set.getLong("matricula_aluno"));
 	
