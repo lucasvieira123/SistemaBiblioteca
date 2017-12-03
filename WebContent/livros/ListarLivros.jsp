@@ -46,8 +46,13 @@
 </c:forEach>
 </table>
 
-<a href="/SistemaBiblioteca/livros/adicionarLivro.html">Adicionar +</a>
+<!-- <a href="/SistemaBiblioteca/livros/adicionarLivro.html">Adicionar +</a> -->
 
+
+</br>
+</br>
+	
+	<a href="/SistemaBiblioteca/menu.jsp"> <<<<< voltar</a>
 	
 	
 </body>

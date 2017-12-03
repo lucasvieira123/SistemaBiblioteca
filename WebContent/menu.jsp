@@ -12,5 +12,9 @@
 
 <a href="alugueis/ListarAlugueisLivro.jsp">Listar alugueis</a> </br></br>
 
+<a href="funcionario/ListarFuncionarios.jsp">Listar funcionarios</a> </br></br>
+
+<a href="livros/ListarLivros.jsp">Listar funcionarios</a> </br></br>
+
 </body>
 </html>

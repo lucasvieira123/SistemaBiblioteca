@@ -29,9 +29,11 @@
 
 </table>
 
-<a href="">Adicionar +</a>
-
+<!-- <a href="">Adicionar +</a> -->
+</br>
+</br>
 	
+	<a href="/SistemaBiblioteca/menu.jsp"> <<<<< voltar</a>
 	
 </body>
 </html>
