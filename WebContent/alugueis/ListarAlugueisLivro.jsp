@@ -22,24 +22,39 @@
 <td>Data final</td>
 <td>Codigo funcionario</td>
 </tr>
-<c:forEach var="alguel" items="${dao.lista}">
+<c:forEach var="aluguel" items="${dao.lista}">
 <tr>
-<td>${alguel.codigo}</td>
-<td>${alguel.codigo_livro}</td>
-<td>${alguel.matricula_aluno}</td>
-<td><fmt:formatDate value="${alguel.data_inicial.time}" type="date" dateStyle="short"/></td>
-<td><fmt:formatDate value="${alguel.data_final.time}" type="date" dateStyle="short"/></td>
-<td>${alguel.codigo_funcionario}</td>
-<td>Alterar</td>
-<td>Remover</td>
+<td>${aluguel.codigo}</td>
+<td>${aluguel.codigo_livro}</td>
+<td>${aluguel.matricula_aluno}</td>
+<td><fmt:formatDate value="${aluguel.data_inicial.time}" type="date" dateStyle="short"/></td>
+<td><fmt:formatDate value="${aluguel.data_final.time}" type="date" dateStyle="short"/></td>
+<td>${aluguel.codigo_funcionario}</td>
+
+
+<td>
+	<form action="/SistemaBiblioteca/alugueis/atualizarAluguel.jsp" method="get">
+<input type="hidden" name="codigo" value="${aluguel.codigo}"/>
+<input type="submit" value="Alterar*"></input>
+</form>
+</td>
+
+<td>
+	<form action="/SistemaBiblioteca/sistema" method="get">
+	<input type="hidden" name="acao" value="removerAluguel"/>
+	<input type="hidden" name="codigo" value="${aluguel.codigo}"/>
+	<input type="submit" value="remover -"></input>
+	</form>
+
+
 </tr>
 </c:forEach>
 
 </table>
 
-<a href="">Adicionar +</a>
+<a href="/SistemaBiblioteca/alugueis/adicionarAlugueisLivro.html">Adicionar +</a> </br></br>
 
-	
+	<a href="/SistemaBiblioteca/menu.jsp"> <<<<< voltar</a>
 	
 </body>
 </html>

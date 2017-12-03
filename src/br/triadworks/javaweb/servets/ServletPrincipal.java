@@ -14,9 +14,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+import DAO.AluguelLivroDAO;
 import DAO.AlunoDAO;
 import DAO.LivroDAO;
 import exceptions.GeralException;
+import model.AluguelLivro;
 import model.Aluno;
 import model.Livro;
 @WebServlet("/sistema")
@@ -40,10 +43,154 @@ public class ServletPrincipal extends HttpServlet {
 			removerLivro(request, response);
 		}else if(acao.equals("alterarLivro")) {
 			alterarLivro(request, response);
+		}else if(acao.equals("alterarAluguel")) {
+			try {
+				alterarAluguel(request, response);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(acao.equals("removerAluguel")) {
+			removerAluguel(request,response);
+		}else if(acao.equals("adicionarAluguelLivro")) {
+			try {
+				adicionarAluguelLivro(request, response);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	
 
+		
+	}
+
+	private void adicionarAluguelLivro(HttpServletRequest request, HttpServletResponse response) throws ParseException, ServletException, IOException {
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
+		
+
+		String codigoLivroEmString="";
+		Long codigoLivro;
+		String matriculaAlunoEmString ="";
+		Long matriculaAluno;
+		String dataInicialEmString ="";
+		Date dataInicial;
+		String dataFinalEmString ="";
+		Date dataFinal;
+		String codigoFuncionarioEmString="";
+		Long codigoFuncionario;
+		
+		codigoLivroEmString = request.getParameter("codigo_livro");
+		codigoLivro = Long.valueOf(codigoLivroEmString);
+		
+		matriculaAlunoEmString = request.getParameter("matricula_aluno");
+		matriculaAluno = Long.valueOf(matriculaAlunoEmString);
+		
+		dataInicialEmString = request.getParameter("data_inicial");
+		dataInicial = sdf.parse(dataInicialEmString);
+		
+		dataFinalEmString = request.getParameter("data_final");
+		dataFinal = sdf.parse(dataFinalEmString);
+		
+		codigoFuncionarioEmString = request.getParameter("codigo_funcionario");
+		codigoFuncionario = Long.valueOf(codigoFuncionarioEmString);
+		
+		AluguelLivro aluguelLivro = new AluguelLivro();
+		Calendar cal = Calendar.getInstance();
+		aluguelLivro.setCodigo_funcionario(codigoFuncionario);
+		aluguelLivro.setCodigo_livro(codigoLivro);
+		
+		cal.setTime(dataFinal);
+		aluguelLivro.setData_final(cal);
+		cal = Calendar.getInstance();
+		cal.setTime(dataInicial);
+		aluguelLivro.setData_inicial(cal);
+		
+		aluguelLivro.setMatricula_aluno(matriculaAluno);
+		 
+		
+		aluguelLivroDAO.salvar(aluguelLivro);
+		
+		
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
+		requestDispatcher.forward(request, response);
+		
+	}
+
+	private void removerAluguel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Long codigo = Long.valueOf(request.getParameter("codigo"));
+		
+		AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
+		aluguelLivroDAO.deletar(codigo);
+		
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
+		requestDispatcher.forward(request, response);
+		
+		
+		
+	}
+
+	private void alterarAluguel(HttpServletRequest request, HttpServletResponse response) throws ParseException, ServletException, IOException {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
+		
+		String codigoEmString = request.getParameter("codigo");
+		Long codigo = Long.valueOf(codigoEmString);
+		
+		String codigoLivroEmString="";
+		Long codigoLivro;
+		String matriculaAlunoEmString ="";
+		Long matriculaAluno;
+		String dataInicialEmString ="";
+		Date dataInicial;
+		String dataFinalEmString ="";
+		Date dataFinal;
+		String codigoFuncionarioEmString="";
+		Long codigoFuncionario;
+		
+		codigoLivroEmString = request.getParameter("codigo_livro");
+		codigoLivro = Long.valueOf(codigoLivroEmString);
+		
+		matriculaAlunoEmString = request.getParameter("matricula_aluno");
+		matriculaAluno = Long.valueOf(matriculaAlunoEmString);
+		
+		dataInicialEmString = request.getParameter("data_inicial");
+		dataInicial = sdf.parse(dataInicialEmString);
+		
+		dataFinalEmString = request.getParameter("data_final");
+		dataFinal = sdf.parse(dataFinalEmString);
+		
+		codigoFuncionarioEmString = request.getParameter("codigo_funcionario");
+		codigoFuncionario = Long.valueOf(codigoFuncionarioEmString);
+		
+		AluguelLivro aluguelLivro = new AluguelLivro();
+		Calendar cal = Calendar.getInstance();
+		aluguelLivro.setCodigo(codigo);
+		aluguelLivro.setCodigo_funcionario(codigoFuncionario);
+		aluguelLivro.setCodigo_livro(codigoLivro);
+		
+		cal.setTime(dataFinal);
+		aluguelLivro.setData_final(cal);
+	 cal = Calendar.getInstance();
+		cal.setTime(dataInicial);
+		aluguelLivro.setData_inicial(cal);
+		
+		aluguelLivro.setMatricula_aluno(matriculaAluno);
+		 
+		
+		aluguelLivroDAO.alterar(aluguelLivro);
+		
+		
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
+		requestDispatcher.forward(request, response);
+		
+		
+		
 		
 	}
 

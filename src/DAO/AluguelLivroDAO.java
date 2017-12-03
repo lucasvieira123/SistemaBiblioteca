@@ -146,7 +146,7 @@ public void salvar(AluguelLivro aluguelLivro){
 
 public void alterar(AluguelLivro aluguelLivro) {
 	String sql = "update "
-			+NOME_TABELA+" set codigo_livro=?, maricula_aluno=?, data_inicial=?, data_final=?, codigo_funcionario=?"
+			+NOME_TABELA+" set codigo_livro=?, matricula_aluno=?, data_inicial=?, data_final=?, codigo_funcionario=?"
 					+ " where codigo=?";
 	
 	try {
@@ -156,6 +156,7 @@ public void alterar(AluguelLivro aluguelLivro) {
 		stmt.setDate(3, new Date(aluguelLivro.getData_inicial().getTimeInMillis()));
 		stmt.setDate(4, new Date(aluguelLivro.getData_final().getTimeInMillis()));
 		stmt.setLong(5, aluguelLivro.getCodigo_funcionario());
+		stmt.setLong(6, aluguelLivro.getCodigo());
 		stmt.execute();
 		stmt.close();
 		
@@ -175,7 +176,7 @@ public void deletar (AluguelLivro aluguelLivro) {
 		try {
 			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
 			
-			preparedStatement.setLong(0, codigo);
+			preparedStatement.setLong(1, codigo);
 			
 			preparedStatement.execute();
 			preparedStatement.close();
@@ -200,6 +201,7 @@ public void deletar (AluguelLivro aluguelLivro) {
 			Calendar calendar = Calendar.getInstance();
 			Date dataInicial =null;
 			Date dataFinal = null;
+			
 			while(result.next()) {
 				aluguelLivro = new AluguelLivro();
 				aluguelLivro.setCodigo(result.getLong("codigo"));
@@ -209,12 +211,13 @@ public void deletar (AluguelLivro aluguelLivro) {
 
 				aluguelLivro.setData_inicial(calendar);
 				
+				calendar = Calendar.getInstance();
 				calendar.setTime(dataFinal);
 				
 				aluguelLivro.setData_final(calendar);
-				aluguelLivro.setCodigo(result.getLong("codigo_livro"));
 				aluguelLivro.setMatricula_aluno(result.getLong("matricula_aluno"));
 				aluguelLivro.setCodigo_funcionario(result.getLong("codigo_funcionario"));
+				aluguelLivro.setCodigo_livro(result.getLong("codigo_livro"));
 				
 				aluguelLivros.add(aluguelLivro);
 			}
@@ -223,6 +226,35 @@ public void deletar (AluguelLivro aluguelLivro) {
 			e.printStackTrace();
 		}
 		return aluguelLivros;
+	}
+	
+	public AluguelLivro getAluguel(Long codigo) throws SQLException {
+		String sql = "select * from "+NOME_TABELA+" where codigo = ?";
+		Calendar cal = Calendar.getInstance();
+		
+		PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+		preparedStatement.setLong(1, codigo);
+		
+	ResultSet set=preparedStatement.executeQuery();
+	set.next();
+	
+	AluguelLivro aluguelLivro = new AluguelLivro();
+	aluguelLivro.setCodigo(codigo);
+	aluguelLivro.setCodigo_funcionario(set.getLong("codigo_funcionario"));
+	aluguelLivro.setCodigo_livro(set.getLong("codigo_livro"));
+	
+	cal.setTime(set.getDate("data_final"));
+	aluguelLivro.setData_final(cal);
+	
+	cal = Calendar.getInstance();
+	
+	cal.setTime(set.getDate("data_inicial"));
+	aluguelLivro.setData_inicial(cal);
+	aluguelLivro.setMatricula_aluno(set.getLong("matricula_aluno"));
+	
+	
+		return aluguelLivro;
+		
 	}
 	
 	

@@ -41,8 +41,11 @@
 
 </table>
 
-<a href="/SistemaBiblioteca/aluno/AdicionarAluno.html">Adicionar +</a>
+<a href="/SistemaBiblioteca/aluno/AdicionarAluno.html">Adicionar +</a></br></br>
 
+
+
+<a href="/SistemaBiblioteca/menu.jsp"> <<<<< voltar</a>
 	
 	
 </body>
