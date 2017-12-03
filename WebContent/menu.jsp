@@ -8,13 +8,15 @@
 </head>
 <body>
 
-<a href="aluno/ListarAlunos.jsp">Listar alunos</a> </br></br>
 
-<a href="alugueis/ListarAlugueisLivro.jsp">Listar alugueis</a> </br></br>
 
-<a href="funcionario/ListarFuncionarios.jsp">Listar funcionarios</a> </br></br>
+<a href="sistema?acao=listarAlunos">Listar alunos</a> </br></br>
 
-<a href="livros/ListarLivros.jsp">Listar funcionarios</a> </br></br>
+<a href="sistema?acao=listarAlugueis">Listar alugueis</a> </br></br>
+
+<a href="sistema?acao=listarFuncionarios">Listar funcionarios</a> </br></br>
+
+<a href="sistema?acao=listarLivros">Listar funcionarios</a> </br></br>
 
 </body>
 </html>

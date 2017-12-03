@@ -59,6 +59,18 @@ public class ServletPrincipal extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}else if (acao.equals("listarAlunos")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/aluno/ListarAlunos.jsp");
+			requestDispatcher.forward(request, response);
+		}else if(acao.equals("listarAlugueis")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("alugueis/ListarAlugueisLivro.jsp");
+			requestDispatcher.forward(request, response);
+		}else if(acao.equals("listarFuncionarios")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("funcionario/ListarFuncionarios.jsp");
+			requestDispatcher.forward(request, response);
+		}else if(acao.equals("listarLivros")) {
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("livros/ListarLivros.jsp");
+			requestDispatcher.forward(request, response);
 		}
 		
 	
