@@ -7,12 +7,15 @@
 <body>
 <form action="/SistemaBiblioteca/sistema" method="get">
 <input type="hidden" name="acao" value="adicionarLivro">
-	Nome: <input type="text" name="nome" value=""> </br>
-	autor: <input type="text" name="autor" value=""> </br>
-	Edição: <input type="text" name="edicao" value=""> </br>
-	Editora: <input type="text" name="editora" value=""> </br>
+	Nome: <input type="text" name="nome" value="" required> </br>
+	autor: <input type="text" name="autor" value="" required> </br>
+	Edição: <input type="text" name="edicao" value="" required> </br>
+	Editora: <input type="text" name="editora" value="" required> </br>
+	Quantidade Exemplares: <input type="number" name ="quantidadeExemplares" value="" required> </br>
 	
 	Salvar <input type="submit" value="Salvar" >
+	
+	
 	
 </form>
 

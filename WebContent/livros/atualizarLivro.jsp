@@ -22,6 +22,7 @@
 	autor: <input type="text" name="autor" value="${livro.autor}"> </br>
 	edicao: <input type="text" name="edicao" value="${livro.edicao} "> </br>
 	editora: <input type="text" name="editora" value="${livro.editora} "> </br>
+	Quantidade Exemplares <input type="text" name="quantidadeExemplares" value="${livro.quantidadeExemplares}"></br>
 	
 	Salvar <input type="submit" value="Salvar" >
 </form>

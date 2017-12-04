@@ -14,46 +14,48 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import DAO.AluguelLivroDAO;
 import DAO.AlunoDAO;
 import DAO.LivroDAO;
+import RN.ValidarAluguelLivroRN;
 import exceptions.GeralException;
 import model.AluguelLivro;
 import model.Aluno;
 import model.Livro;
 import regras.CalculadorMulta;
+
+
 @WebServlet("/sistema")
 public class ServletPrincipal extends HttpServlet {
 
 	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String acao = request.getParameter("acao");
-			
-		if(acao.equals("adicionarAluno")){
+
+		if (acao.equals("adicionarAluno")) {
 			adicionarAluno(request, response);
-		}else if (acao.equals("removerAluno")) {
+		} else if (acao.equals("removerAluno")) {
 			removerAluno(request, response);
-		}
-		else if (acao.equals("alterarAluno")) {
+		} else if (acao.equals("alterarAluno")) {
 			alterarAluno(request, response);
-		}else if (acao.equals("adicionarLivro")) {
+		} else if (acao.equals("adicionarLivro")) {
 			adicionarLivro(request, response);
-		}else if (acao.equals("removerLivro")) {
+		} else if (acao.equals("removerLivro")) {
 			removerLivro(request, response);
-		}else if(acao.equals("alterarLivro")) {
+		} else if (acao.equals("alterarLivro")) {
 			alterarLivro(request, response);
-		}else if(acao.equals("alterarAluguel")) {
+		} else if (acao.equals("alterarAluguel")) {
 			try {
 				alterarAluguel(request, response);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}else if(acao.equals("removerAluguel")) {
-			removerAluguel(request,response);
-		}else if(acao.equals("adicionarAluguelLivro")) {
+		} else if (acao.equals("removerAluguel")) {
+			removerAluguel(request, response);
+		} else if (acao.equals("adicionarAluguelLivro")) {
 			try {
 				adicionarAluguelLivro(request, response);
 			} catch (ParseException e) {
@@ -91,307 +93,293 @@ public class ServletPrincipal extends HttpServlet {
 			aluguelLivroDAO.deletar(calculadorMulta.aluguelLivroRegistro);
 			
 		}
-		
-		
-		
-	
 
-		
+
 	}
 
 
-	private void adicionarAluguelLivro(HttpServletRequest request, HttpServletResponse response) throws ParseException, ServletException, IOException {
-	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
-		AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
-		
+	private void adicionarAluguelLivro(HttpServletRequest request, HttpServletResponse response)
+			throws ParseException, ServletException, IOException {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-		String codigoLivroEmString="";
+		AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
+		LivroDAO livroDAO = new LivroDAO();
+
+		String codigoLivroEmString = "";
 		Long codigoLivro;
-		String matriculaAlunoEmString ="";
+		String matriculaAlunoEmString = "";
 		Long matriculaAluno;
-		String dataInicialEmString ="";
+		String dataInicialEmString = "";
 		Date dataInicial;
-		String dataFinalEmString ="";
+		String dataFinalEmString = "";
 		Date dataFinal;
-		String codigoFuncionarioEmString="";
+		String codigoFuncionarioEmString = "";
 		Long codigoFuncionario;
-		
+
 		codigoLivroEmString = request.getParameter("codigo_livro");
 		codigoLivro = Long.valueOf(codigoLivroEmString);
-		
+
 		matriculaAlunoEmString = request.getParameter("matricula_aluno");
 		matriculaAluno = Long.valueOf(matriculaAlunoEmString);
-		
+
 		dataInicialEmString = request.getParameter("data_inicial");
 		dataInicial = sdf.parse(dataInicialEmString);
-		
+
 		dataFinalEmString = request.getParameter("data_final");
 		dataFinal = sdf.parse(dataFinalEmString);
-		
+
 		codigoFuncionarioEmString = request.getParameter("codigo_funcionario");
 		codigoFuncionario = Long.valueOf(codigoFuncionarioEmString);
-		
+
 		AluguelLivro aluguelLivro = new AluguelLivro();
 		Calendar cal = Calendar.getInstance();
 		aluguelLivro.setCodigo_funcionario(codigoFuncionario);
 		aluguelLivro.setCodigo_livro(codigoLivro);
-		
+
 		cal.setTime(dataFinal);
 		aluguelLivro.setData_final(cal);
 		cal = Calendar.getInstance();
 		cal.setTime(dataInicial);
 		aluguelLivro.setData_inicial(cal);
-		
+
 		aluguelLivro.setMatricula_aluno(matriculaAluno);
-		 
-		
-		aluguelLivroDAO.salvar(aluguelLivro);
-		
-		
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
-		requestDispatcher.forward(request, response);
-		
+
+		if (ValidarAluguelLivroRN.validarQuantidadeDisponivel(codigoLivro)) {
+			//Emite um alerta na tela, mas não consegui fazer com que a página recarregasse novamente
+			/*PrintWriter out = response.getWriter();
+			out.println("<script>alert('Não é possível locar este livro, pois não há exemplares disponíveis!');</script>");*/
+			request.setAttribute("mensagem", "Não é possível locar este livro, pois não há exemplares disponíveis!");
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
+			requestDispatcher.forward(request, response);
+		} else {
+			aluguelLivroDAO.salvar(aluguelLivro);
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
+			requestDispatcher.forward(request, response);
+		}
+
 	}
 
-	private void removerAluguel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void removerAluguel(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		Long codigo = Long.valueOf(request.getParameter("codigo"));
-		
+
 		AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
 		aluguelLivroDAO.deletar(codigo);
-		
+
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
 		requestDispatcher.forward(request, response);
-		
-		
-		
+
 	}
 
-	private void alterarAluguel(HttpServletRequest request, HttpServletResponse response) throws ParseException, ServletException, IOException {
-		
+	private void alterarAluguel(HttpServletRequest request, HttpServletResponse response)
+			throws ParseException, ServletException, IOException {
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		AluguelLivroDAO aluguelLivroDAO = new AluguelLivroDAO();
-		
+
 		String codigoEmString = request.getParameter("codigo");
 		Long codigo = Long.valueOf(codigoEmString);
-		
-		String codigoLivroEmString="";
+
+		String codigoLivroEmString = "";
 		Long codigoLivro;
-		String matriculaAlunoEmString ="";
+		String matriculaAlunoEmString = "";
 		Long matriculaAluno;
-		String dataInicialEmString ="";
+		String dataInicialEmString = "";
 		Date dataInicial;
-		String dataFinalEmString ="";
+		String dataFinalEmString = "";
 		Date dataFinal;
-		String codigoFuncionarioEmString="";
+		String codigoFuncionarioEmString = "";
 		Long codigoFuncionario;
-		
+
 		codigoLivroEmString = request.getParameter("codigo_livro");
 		codigoLivro = Long.valueOf(codigoLivroEmString);
-		
+
 		matriculaAlunoEmString = request.getParameter("matricula_aluno");
 		matriculaAluno = Long.valueOf(matriculaAlunoEmString);
-		
+
 		dataInicialEmString = request.getParameter("data_inicial");
 		dataInicial = sdf.parse(dataInicialEmString);
-		
+
 		dataFinalEmString = request.getParameter("data_final");
 		dataFinal = sdf.parse(dataFinalEmString);
-		
+
 		codigoFuncionarioEmString = request.getParameter("codigo_funcionario");
 		codigoFuncionario = Long.valueOf(codigoFuncionarioEmString);
-		
+
 		AluguelLivro aluguelLivro = new AluguelLivro();
 		Calendar cal = Calendar.getInstance();
 		aluguelLivro.setCodigo(codigo);
 		aluguelLivro.setCodigo_funcionario(codigoFuncionario);
 		aluguelLivro.setCodigo_livro(codigoLivro);
-		
+
 		cal.setTime(dataFinal);
 		aluguelLivro.setData_final(cal);
-	 cal = Calendar.getInstance();
+		cal = Calendar.getInstance();
 		cal.setTime(dataInicial);
 		aluguelLivro.setData_inicial(cal);
-		
+
 		aluguelLivro.setMatricula_aluno(matriculaAluno);
-		 
-		
+
 		aluguelLivroDAO.alterar(aluguelLivro);
-		
-		
+
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/alugueis/ListarAlugueisLivro.jsp");
 		requestDispatcher.forward(request, response);
-		
-		
-		
-		
+
 	}
 
-	private void alterarLivro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void alterarLivro(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String codigoEmString = request.getParameter("codigo");
 		Long codigo = Long.valueOf(codigoEmString);
-		
-		String nome="";
-		String autor="";
-		String edicao="";
-		String editora="";
-		
-		nome=request.getParameter("nome");
-		autor=request.getParameter("autor");
-		edicao=request.getParameter("edicao");
-		editora=request.getParameter("editora");
-		
-	Livro livro = new Livro();
-		
+
+		String nome = "";
+		String autor = "";
+		String edicao = "";
+		String editora = "";
+
+		nome = request.getParameter("nome");
+		autor = request.getParameter("autor");
+		edicao = request.getParameter("edicao");
+		editora = request.getParameter("editora");
+
+		Livro livro = new Livro();
+
 		livro.setAutor(autor);
 		livro.setEdicao(edicao);
 		livro.setEditora(editora);
 		livro.setNome(nome);
 		livro.setCodigo(codigo);
-		
+
 		LivroDAO livroDAO = new LivroDAO();
-		
+
 		livroDAO.alterar(livro);
-		
+
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/livros/ListarLivros.jsp");
 		requestDispatcher.forward(request, response);
-		
-		
-		
+
 	}
 
-	private void removerLivro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void removerLivro(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		LivroDAO livrodao = new LivroDAO();
 		String codigoEmString = request.getParameter("codigo");
 		Long codigo = Long.valueOf(codigoEmString);
 		livrodao.deletar(codigo);
-		
+
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/livros/ListarLivros.jsp");
 		requestDispatcher.forward(request, response);
-		
-		
-	
-		
+
 	}
 
-	private void adicionarLivro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String nome="";
-		String autor="";
-		String edicao="";
-		String editora="";
-		
-		nome=request.getParameter("nome");
-		autor=request.getParameter("autor");
-		edicao=request.getParameter("edicao");
-		editora=request.getParameter("editora");
-		
+	private void adicionarLivro(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String nome = "";
+		String autor = "";
+		String edicao = "";
+		String editora = "";
+		String quantidadeExemplares;
+
+		nome = request.getParameter("nome");
+		autor = request.getParameter("autor");
+		edicao = request.getParameter("edicao");
+		editora = request.getParameter("editora");
+		quantidadeExemplares = request.getParameter("quantidadeExemplares");
+
 		Livro livro = new Livro();
-		
+
 		livro.setAutor(autor);
 		livro.setEdicao(edicao);
 		livro.setEditora(editora);
 		livro.setNome(nome);
-		
+		livro.setQuantidadeExemplares(Integer.parseInt(quantidadeExemplares));
+
 		LivroDAO livroDAO = new LivroDAO();
 		livroDAO.salvar(livro);
-		
+
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/livros/ListarLivros.jsp");
 		requestDispatcher.forward(request, response);
-		
+
 	}
 
-	private void alterarAluno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+	private void alterarAluno(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String nome = request.getParameter("nome");
 		String dataNascimentoEmString = request.getParameter("data_nascimento");
-		Date dataNascimento= null;
-		Calendar dataNascimentoEmCalendar =null;
+		Date dataNascimento = null;
+		Calendar dataNascimentoEmCalendar = null;
 		try {
-			 dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(dataNascimentoEmString);
-			 dataNascimentoEmCalendar = Calendar.getInstance();
-			 dataNascimentoEmCalendar.setTime(dataNascimento);
+			dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(dataNascimentoEmString);
+			dataNascimentoEmCalendar = Calendar.getInstance();
+			dataNascimentoEmCalendar.setTime(dataNascimento);
 		} catch (ParseException e) {
-			
+
 			e.printStackTrace();
-			
+
 			throw new GeralException(e.getMessage());
 		}
-		
+
 		String endereco = request.getParameter("endereco");
-		
-		
-		
-		
-		
-		
+
 		Aluno aluno = new Aluno();
-		
+
 		aluno.setNome(nome);
 		aluno.setData_nascimento(dataNascimentoEmCalendar);
 		aluno.setEndereco(endereco);
-		
+
 		AlunoDAO alunoDAO = new AlunoDAO();
 		alunoDAO.alterar(aluno);
-		
+
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/aluno/ListarAlunos.jsp");
 		requestDispatcher.forward(request, response);
-		
-		
+
 	}
 
-	private void removerAluno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void removerAluno(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String matricula = request.getParameter("matricula");
-		
+
 		AlunoDAO alunoDAO = new AlunoDAO();
 		Aluno aluno = new Aluno();
 		aluno.setMatricula(Long.valueOf(matricula));
 		alunoDAO.deletar(aluno);
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/aluno/ListarAlunos.jsp");
 		requestDispatcher.forward(request, response);
-		
+
 	}
 
-	private void adicionarAluno(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	private void adicionarAluno(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		String nome = request.getParameter("nome");
 		String dataNascimentoEmString = request.getParameter("data_nascimento");
-		Date dataNascimento= null;
-		Calendar dataNascimentoEmCalendar =null;
+		Date dataNascimento = null;
+		Calendar dataNascimentoEmCalendar = null;
 		try {
-			 dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(dataNascimentoEmString);
-			 dataNascimentoEmCalendar = Calendar.getInstance();
-			 dataNascimentoEmCalendar.setTime(dataNascimento);
+			dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(dataNascimentoEmString);
+			dataNascimentoEmCalendar = Calendar.getInstance();
+			dataNascimentoEmCalendar.setTime(dataNascimento);
 		} catch (ParseException e) {
-			
+
 			e.printStackTrace();
-			
+
 			throw new GeralException(e.getMessage());
 		}
-		
+
 		String endereco = request.getParameter("endereco");
-		
-		
-		
-		
-		
-		
+
 		Aluno aluno = new Aluno();
-		
+
 		aluno.setNome(nome);
 		aluno.setData_nascimento(dataNascimentoEmCalendar);
 		aluno.setEndereco(endereco);
-		
+
 		AlunoDAO alunoDAO = new AlunoDAO();
 		alunoDAO.salvar(aluno);
-		
+
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("aluno/ListarAlunos.jsp");
 		requestDispatcher.forward(request, response);
 	}
-	
-	
-	
-	
 
 }

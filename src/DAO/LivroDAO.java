@@ -19,113 +19,107 @@ import model.Aluno;
 import model.Funcionario;
 import model.Livro;
 
-
-
 public class LivroDAO {
 	private Connection conexao;
 	private static String NOME_TABELA;
-	
-	
-	
+
 	private Class classe = Livro.class;
-	private Method[] metodos =  classe.getDeclaredMethods();
-	
+	private Method[] metodos = classe.getDeclaredMethods();
+
 	private List<Method> metodosComGet = new ArrayList<>();
 	private List<String> atributos = new ArrayList<>();
-	
-	public LivroDAO(){
+
+	public LivroDAO() {
 		this.conexao = new ConnectionFactory().getConnection();
 		this.NOME_TABELA = classe.getSimpleName();
 
 		String nomeDoMetodoAtual;
-		for(int j =0; j<metodos.length; j++ ) {
-			 nomeDoMetodoAtual = metodos[j].getName();
-			 
-			 if(nomeDoMetodoAtual.contains("get")) {
-				 metodosComGet.add(metodos[j]);
-			 }
+		for (int j = 0; j < metodos.length; j++) {
+			nomeDoMetodoAtual = metodos[j].getName();
+
+			if (nomeDoMetodoAtual.contains("get")) {
+				metodosComGet.add(metodos[j]);
+			}
 		}
-		
-		String nomeAtributo ="";
-		for(int i =0 ; i< metodosComGet.size(); i++) {
-		 nomeAtributo = metodosComGet.get(i).getName();
+
+		String nomeAtributo = "";
+		for (int i = 0; i < metodosComGet.size(); i++) {
+			nomeAtributo = metodosComGet.get(i).getName();
 			nomeAtributo = nomeAtributo.replace("get", "");
 			nomeAtributo = nomeAtributo.toLowerCase();
 			atributos.add(nomeAtributo);
 		}
-		
+
 	}
-	
-public void salvar(Livro livro){
-		
-		String sql = String.format("insert into %s ",NOME_TABELA );
-		for(int i =0; i<atributos.size(); i++) {
-			
-			//primero
-			if(i==0) {
-				sql=sql.concat("(");
+
+	public void salvar(Livro livro) {
+
+		String sql = String.format("insert into %s ", NOME_TABELA);
+		for (int i = 0; i < atributos.size(); i++) {
+
+			// primero
+			if (i == 0) {
+				sql = sql.concat("(");
 			}
-			
-			//antes do ultimo
-			if(i<=atributos.size()-1) {
-				sql=sql.concat("%s");
-				sql = String.format(sql, ","+atributos.get(i) );
+
+			// antes do ultimo
+			if (i <= atributos.size() - 1) {
+				sql = sql.concat("%s");
+				sql = String.format(sql, "," + atributos.get(i));
 			}
-			//ultimo atributo
-			if(i==atributos.size()-1) {
-				sql= sql.replaceFirst(",", " ");
-				
-				sql=sql.concat(")");
-				
+			// ultimo atributo
+			if (i == atributos.size() - 1) {
+				sql = sql.replaceFirst(",", " ");
+
+				sql = sql.concat(")");
+
 			}
-			
+
 		}
-		
-		sql =sql.concat(" values ");
-		
-		String values="";
-		
-	for(int i =0; i<atributos.size(); i++) {
-			
-			//primero
-			if(i==0) {
-				values=values.concat("(");
+
+		sql = sql.concat(" values ");
+
+		String values = "";
+
+		for (int i = 0; i < atributos.size(); i++) {
+
+			// primero
+			if (i == 0) {
+				values = values.concat("(");
 			}
-			
-			//antes do ultimo
-			if(i<=atributos.size()-1) {
-				values=values.concat(",?");
+
+			// antes do ultimo
+			if (i <= atributos.size() - 1) {
+				values = values.concat(",?");
 			}
-			//ultimo atributo
-			if(i==atributos.size()-1) {
-				values= values.replaceFirst(",", " ");
-				values=values.concat(")");
-			
+			// ultimo atributo
+			if (i == atributos.size() - 1) {
+				values = values.replaceFirst(",", " ");
+				values = values.concat(")");
+
 			}
-			
+
 		}
-	
-	sql =sql.concat(values);
-		
-		
+
+		sql = sql.concat(values);
+
 		try {
 			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-			
-		
-			for(int i =0; i< metodosComGet.size() ; i++) {
+
+			for (int i = 0; i < metodosComGet.size(); i++) {
 				try {
-					Object retornoDoMetodo = metodosComGet.get(i).invoke(livro);					
-					if(retornoDoMetodo instanceof String) {
-						preparedStatement.setString(i+1, (String)retornoDoMetodo);
-					}else if(retornoDoMetodo instanceof Long) {
-						preparedStatement.setLong(i+1, (Long)retornoDoMetodo);
-						
-					}else if(retornoDoMetodo instanceof Calendar) {
-						preparedStatement.setDate(i+1, new Date(((Calendar)retornoDoMetodo).getTimeInMillis()));
-						
+					Object retornoDoMetodo = metodosComGet.get(i).invoke(livro);
+					if (retornoDoMetodo instanceof String) {
+						preparedStatement.setString(i + 1, (String) retornoDoMetodo);
+					} else if (retornoDoMetodo instanceof Long) {
+						preparedStatement.setLong(i + 1, (Long) retornoDoMetodo);
+
+					} else if (retornoDoMetodo instanceof Calendar) {
+						preparedStatement.setDate(i + 1, new Date(((Calendar) retornoDoMetodo).getTimeInMillis()));
+					} else if (retornoDoMetodo instanceof Integer) {
+						preparedStatement.setInt(i + 1, (Integer) retornoDoMetodo);
 					}
-					
-					
+
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -137,131 +131,149 @@ public void salvar(Livro livro){
 					e.printStackTrace();
 				}
 			}
-			
+
 			preparedStatement.execute();
 			preparedStatement.close();
 			conexao.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException();
-			
+
 		}
 	}
 
-public List<Livro> getLista() {
-	List<Livro> livros = new ArrayList<>();
-	try {
-		PreparedStatement stmt = conexao.prepareStatement("select * from "+NOME_TABELA);
-		
-		ResultSet result = stmt.executeQuery();
-		Livro livro = null;
-		Long codigo;
-		String nome;
-		String autor;
-		String edicao;
-		String editora;
-		
-		while(result.next()) {
-			livro = new Livro();
-			
-			codigo = result.getLong("codigo");
-			nome = result.getString("nome");
-			autor = result.getString("autor");
-			edicao = result.getString("edicao");
-			editora = result.getString("editora");
-			
-			livro.setAutor(autor);
-			livro.setCodigo(codigo);
-			livro.setEdicao(edicao);
-			livro.setEditora(editora);
-			livro.setNome(nome);
-			
-			livros.add(livro);
-			
-			
-			
-		}
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	return livros;
-}
-
-public void alterar(Livro livro) {
-	String sql = "update "+NOME_TABELA+" set nome=?, autor=?,edicao=?,editora=? "
-			+ "where codigo =?";
-	
-	PreparedStatement preparedStatement;
-	try {
-		preparedStatement = conexao.prepareStatement(sql);
-		preparedStatement.setString(1, livro.getNome());
-		preparedStatement.setString(2, livro.getAutor());
-		preparedStatement.setString(3, livro.getEdicao());
-		preparedStatement.setString(4, livro.getEditora());
-		preparedStatement.setLong(5, livro.getCodigo());
-		
-		preparedStatement.execute();
-		preparedStatement.close();
-		conexao.close();
-		
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-}
-
-public void deletar (Livro livro) {
-	deletar(livro.getCodigo());
-	}
-	
-	public void deletar (Long codigo) {
-		String sql = "delete from "+NOME_TABELA+" where codigo=?";
-		
+	public List<Livro> getLista() {
+		List<Livro> livros = new ArrayList<>();
 		try {
-			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-			
-			preparedStatement.setLong(1, codigo);
-			
-			preparedStatement.execute();
-			preparedStatement.close();
-			conexao.close();
-			
+			PreparedStatement stmt = conexao.prepareStatement("select * from " + NOME_TABELA);
+
+			ResultSet result = stmt.executeQuery();
+			Livro livro = null;
+			Long codigo;
+			String nome;
+			String autor;
+			String edicao;
+			String editora;
+			Integer quantidadeExemplares;
+
+			while (result.next()) {
+				livro = new Livro();
+
+				codigo = result.getLong("codigo");
+				nome = result.getString("nome");
+				autor = result.getString("autor");
+				edicao = result.getString("edicao");
+				editora = result.getString("editora");
+				quantidadeExemplares = result.getInt("quantidadeexemplares");
+
+				livro.setAutor(autor);
+				livro.setCodigo(codigo);
+				livro.setEdicao(edicao);
+				livro.setEditora(editora);
+				livro.setNome(nome);
+				livro.setQuantidadeExemplares(quantidadeExemplares);
+
+				livros.add(livro);
+
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return livros;
+	}
+
+	public Integer pegaQuantidadeAtualDoLivro(Long codigoLivro) {
+		Integer quantidadeExemplares = 0;
+		String sql = "select quantidadeexemplares from " + NOME_TABELA + " where codigo = ?";
+		try {
+			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+			preparedStatement.setLong(1, codigoLivro);
+			ResultSet result = preparedStatement.executeQuery();
+			
+			result.next();
+			
+			quantidadeExemplares = result.getInt("quantidadeexemplares");
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
+		return quantidadeExemplares;
 	}
 	
+	public void alterar(Livro livro) {
+		String sql = "update " + NOME_TABELA + " set nome=?, autor=?,edicao=?,editora=?,quantidadeexemplares=? "
+				+ "where codigo =?";
+
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = conexao.prepareStatement(sql);
+			preparedStatement.setString(1, livro.getNome());
+			preparedStatement.setString(2, livro.getAutor());
+			preparedStatement.setString(3, livro.getEdicao());
+			preparedStatement.setString(4, livro.getEditora());
+			preparedStatement.setInt(5, livro.getQuantidadeExemplares());
+			preparedStatement.setLong(6, livro.getCodigo());
+
+			preparedStatement.execute();
+			preparedStatement.close();
+			conexao.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void deletar(Livro livro) {
+		deletar(livro.getCodigo());
+	}
+
+	public void deletar(Long codigo) {
+		String sql = "delete from " + NOME_TABELA + " where codigo=?";
+
+		try {
+			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
+
+			preparedStatement.setLong(1, codigo);
+
+			preparedStatement.execute();
+			preparedStatement.close();
+			conexao.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	public Livro getLivro(Long codigo) {
-		String sql = "select * from "+NOME_TABELA+" where codigo = ?";
-	
+		String sql = "select * from " + NOME_TABELA + " where codigo = ?";
+
 		Livro livro = new Livro();
 		try {
 			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
 			preparedStatement.setLong(1, codigo);
 			ResultSet set = preparedStatement.executeQuery();
-			
+
 			set.next();
-		
+
 			livro.setCodigo(set.getLong("codigo"));
 			livro.setNome(set.getString("nome"));
 			livro.setAutor(set.getString("autor"));
 			livro.setEdicao(set.getString("edicao"));
 			livro.setEditora(set.getString("editora"));
-			
-			
-			
+			livro.setQuantidadeExemplares(set.getInt("quantidadeexemplares"));
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return livro;
-		
+
 	}
-	
-	
-	
+
 }

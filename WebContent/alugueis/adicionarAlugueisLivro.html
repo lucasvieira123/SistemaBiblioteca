@@ -8,15 +8,17 @@
 <form action="/SistemaBiblioteca/sistema" method="get">
 <input type="hidden" name="acao" value="adicionarAluguelLivro">
 
-	Codigo livro: <input type="text" name="codigo_livro" value=""> </br>
-	Matricula aluno: <input type="text" name="matricula_aluno" value=""> </br>
-	Data inicial: <input type="text" name="data_inicial" value=""> </br>
-	data final: <input type="text" name="data_final" value=""> </br>
-	código funcionario: <input type="text" name="codigo_funcionario" value=""> </br>
+	Codigo livro: <input type="text" name="codigo_livro" value="" required> </br>
+	Matricula aluno: <input type="text" name="matricula_aluno" value="" required> </br>
+	Data inicial: <input type="text" name="data_inicial" value="" required> </br>
+	data final: <input type="text" name="data_final" value="" required> </br>
+	Código funcionario: <input type="text" name="codigo_funcionario" value="" required> </br>
 	
-	Salvar <input type="submit" value="Salvar" >
+	<input type="submit" value="Salvar" >
 	
 </form>
+
+
 
 </body>
 </html>
