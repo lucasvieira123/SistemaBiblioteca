@@ -15,7 +15,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import br.com.triadworks.jdbc.ConnectionFactory;
+import jdbc.ConnectionFactory;
+import jdbc.ConnectionMySql;
 import model.AluguelLivro;
 import model.Aluno;
 
@@ -33,7 +34,9 @@ public class AluguelLivroDAO {
 	private List<String> atributos = new ArrayList<>();
 	
 	public AluguelLivroDAO(){
-		this.conexao = new ConnectionFactory().getConnection();
+		ConnectionMySql connectionMySql = ConnectionMySql.getInstance();
+		this.conexao = connectionMySql.getConnection();
+		
 		this.NOME_TABELA = classe.getSimpleName();
 
 		String nomeDoMetodoAtual;

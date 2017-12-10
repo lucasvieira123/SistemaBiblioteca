@@ -14,7 +14,7 @@ import java.util.List;
 
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
-import br.com.triadworks.jdbc.ConnectionFactory;
+import jdbc.ConnectionMySql;
 import model.Aluno;
 import model.Funcionario;
 import model.Livro;
@@ -30,7 +30,7 @@ public class LivroDAO {
 	private List<String> atributos = new ArrayList<>();
 
 	public LivroDAO() {
-		this.conexao = new ConnectionFactory().getConnection();
+		this.conexao =  ConnectionMySql.getInstance().getConnection();
 		this.NOME_TABELA = classe.getSimpleName();
 
 		String nomeDoMetodoAtual;
@@ -183,24 +183,6 @@ public class LivroDAO {
 		return livros;
 	}
 
-	public Integer pegaQuantidadeAtualDoLivro(Long codigoLivro) {
-		Integer quantidadeExemplares = 0;
-		String sql = "select quantidadeexemplares from " + NOME_TABELA + " where codigo = ?";
-		try {
-			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
-			preparedStatement.setLong(1, codigoLivro);
-			ResultSet result = preparedStatement.executeQuery();
-			
-			result.next();
-			
-			quantidadeExemplares = result.getInt("quantidadeexemplares");
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return quantidadeExemplares;
-	}
 	
 	public void alterar(Livro livro) {
 		String sql = "update " + NOME_TABELA + " set nome=?, autor=?,edicao=?,editora=?,quantidadeexemplares=? "

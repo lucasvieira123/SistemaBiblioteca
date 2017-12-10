@@ -9,11 +9,11 @@
 <body>
 
 <form action="/SistemaBiblioteca/sistema" method="get">
-<input type="hidden" name="acao" value="livroDevolvido">
+<input type="hidden" name="acao" value="LivroDevolvido">
 Matricula: <input type="text" name="matricula_aluno" value="">
 Código livro: <input type="text" name="codigo_livro" value="">
 <input type="submit" value="Devolver">
 </form>
-
+<a href="/SistemaBiblioteca/sistema?acao=VoltarMenu"> <<<<< voltar</a>
 </body>
 </html>

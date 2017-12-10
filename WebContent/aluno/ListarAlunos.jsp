@@ -26,7 +26,7 @@
 <td>${aluno.endereco} </td>
 
 <form action="sistema" method="get">
-	 <input type="hidden" name="acao" value="removerAluno"/>
+	 <input type="hidden" name="acao" value="RemoverAluno"/>
 	 <input type="hidden" name="matricula" value="${aluno.matricula}"/>
 	<td> <button type="submit" value="">Remover -</button> </td>
 </form>
@@ -45,7 +45,7 @@
 
 
 
-<a href="/SistemaBiblioteca/menu.jsp"> <<<<< voltar</a>
+<a href="/SistemaBiblioteca/sistema?acao=VoltarMenu"> <<<<< voltar</a>
 	
 	
 </body>

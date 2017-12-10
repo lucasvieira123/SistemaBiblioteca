@@ -8,17 +8,27 @@
 </head>
 <body>
 
+<table>
+<tr> 
+<td><a href="sistema?acao=ListarAlunos">Listar alunos</a> </td>
+<td><a href="sistema?acao=ListarAlugueis">Listar alugueis</a></td>
+<td><a href="sistema?acao=ListarFuncionarios">Listar funcionarios</a></td>
+<td><a href="sistema?acao=ListarLivros">Listar Livros</a></td>
+<td><a href="sistema?acao=DevolverLivro">Devolver Livro</a></td>
+</tr>
+
+</table>
 
 
-<a href="sistema?acao=listarAlunos">Listar alunos</a> </br></br>
+     
 
-<a href="sistema?acao=listarAlugueis">Listar alugueis</a> </br></br>
 
-<a href="sistema?acao=listarFuncionarios">Listar funcionarios</a> </br></br>
 
-<a href="sistema?acao=listarLivros">Listar funcionarios</a> </br></br>
 
-<a href="sistema?acao=devolverLivro">Devolver Livro</a> </br></br>
+
+
+
+
 
 </body>
 </html>

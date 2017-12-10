@@ -16,7 +16,7 @@
 <c:set var = "aluguel" scope = "session" value = "${dao.getAluguel(codigo)}"/>
 
 <form action="/SistemaBiblioteca/sistema" method="get">
-<input type="hidden" name="acao" value="alterarAluguel">
+<input type="hidden" name="acao" value="AlterarAluguel">
 <input type="hidden" name="codigo" value="${aluguel.codigo}">
 	Código Livro: <input type="text" name="codigo_livro" value="${aluguel.codigo_livro}"> </br>
 	Matricula Aluno: <input type="text" name="matricula_aluno" value="${aluguel.matricula_aluno}"> </br>

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.triadworks.jdbc.ConnectionFactory;
+import jdbc.ConnectionMySql;
 import model.Aluno;
 import model.Funcionario;
 
@@ -29,7 +29,7 @@ public class FuncionarioDAO {
 	private List<String> atributos = new ArrayList<>();
 	
 	public FuncionarioDAO(){
-		this.conexao = new ConnectionFactory().getConnection();
+		this.conexao =  ConnectionMySql.getInstance().getConnection();
 		this.NOME_TABELA = classe.getSimpleName();
 
 		String nomeDoMetodoAtual;

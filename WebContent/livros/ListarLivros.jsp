@@ -54,7 +54,7 @@
 </br>
 </br>
 	
-	<a href="/SistemaBiblioteca/menu.jsp"> <<<<< voltar</a>
+	<a href="/SistemaBiblioteca/sistema?acao=VoltarMenu"> <<<<< voltar</a>
 	
 	
 </body>

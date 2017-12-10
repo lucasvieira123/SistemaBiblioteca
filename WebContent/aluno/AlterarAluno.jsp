@@ -13,8 +13,8 @@
 <fmt:parseNumber var="matricula" scope = "session" type="number" value="${param.matricula}" />
 <c:set var = "aluno" scope = "session" value = "${dao.getAluno(matricula)}"/>
 
-<form action="sistema" method="get">
-<input type="hidden" name="acao" value="alterarAluno">
+<form action="/SistemaBiblioteca/sistema" method="get">
+<input type="hidden" name="acao" value="AlterarAluno">
 <input type="hidden" name="matricula" value="${aluno.matricula}">
 	Nome: <input type="text" name="nome" value="${aluno.nome}"> </br>
 	Data: <input type="text" name="data_nascimento" value="<fmt:formatDate value="${aluno.data_nascimento.time}" type="date" dateStyle="short"/>" > </br>

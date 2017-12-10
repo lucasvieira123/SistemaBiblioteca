@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.triadworks.jdbc.ConnectionFactory;
+import jdbc.ConnectionMySql;
 import model.AluguelLivro;
 import model.Aluno;
 import model.Funcionario;
@@ -30,7 +30,7 @@ public class AlunoDAO {
 	private List<String> atributos = new ArrayList<>();
 	
 	public AlunoDAO(){
-		this.conexao = new ConnectionFactory().getConnection();
+		this.conexao =  ConnectionMySql.getInstance().getConnection();
 		this.NOME_TABELA = classe.getSimpleName();
 
 		String nomeDoMetodoAtual;
@@ -174,7 +174,7 @@ public void salvar(Aluno aluno) {
 	}
 	
 	public void alterar (Aluno aluno) {
-		String sql = "update "+ NOME_TABELA+"set nome=?, data_nascimento=?, endereco=? "
+		String sql = "update "+ NOME_TABELA+" set nome=?, data_nascimento=?, endereco=? "
 				+ "where matricula=?";
 		
 		try {

@@ -16,7 +16,7 @@
 <c:set var = "livro" scope = "session" value = "${dao.getLivro(codigo)}"/>
 
 <form action="/SistemaBiblioteca/sistema" method="get">
-<input type="hidden" name="acao" value="alterarLivro">
+<input type="hidden" name="acao" value="AlterarLivro">
 <input type="hidden" name="codigo" value="${livro.codigo}">
 	Nome: <input type="text" name="nome" value="${livro.nome}"> </br>
 	autor: <input type="text" name="autor" value="${livro.autor}"> </br>
