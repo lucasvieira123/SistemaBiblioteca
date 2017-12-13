@@ -31,7 +31,7 @@ public class LivroDAO {
 
 	public LivroDAO() {
 		this.conexao =  ConnectionMySql.getInstance().getConnection();
-		this.NOME_TABELA = classe.getSimpleName();
+		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
 
 		String nomeDoMetodoAtual;
 		for (int j = 0; j < metodos.length; j++) {

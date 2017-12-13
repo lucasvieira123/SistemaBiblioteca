@@ -37,7 +37,7 @@ public class AluguelLivroDAO {
 		ConnectionMySql connectionMySql = ConnectionMySql.getInstance();
 		this.conexao = connectionMySql.getConnection();
 		
-		this.NOME_TABELA = classe.getSimpleName();
+		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
 
 		String nomeDoMetodoAtual;
 		for(int j =0; j<metodos.length; j++ ) {
