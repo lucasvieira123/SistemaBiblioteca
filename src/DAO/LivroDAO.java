@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
+import jdbc.ConnectionFactory;
 import jdbc.ConnectionMySql;
 import model.Aluno;
 import model.Funcionario;
@@ -30,7 +31,8 @@ public class LivroDAO {
 	private List<String> atributos = new ArrayList<>();
 
 	public LivroDAO() {
-		this.conexao =  ConnectionMySql.getInstance().getConnection();
+		ConnectionFactory connectionFactory = ConnectionMySql.getInstance();
+		this.conexao = (Connection) connectionFactory.getProduto().getConnection();
 		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
 
 		String nomeDoMetodoAtual;

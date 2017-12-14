@@ -18,14 +18,21 @@ public class ConnectionMySql extends ConnectionFactory {
 		
 		return instance;
 	}
-	
-	public  Connection getConnection(){
-		try {
-			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-			return DriverManager.getConnection("jdbc:mysql://localhost/biblioteca","root","root");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
+
+	@Override
+	public ProdutoConnection getProduto() {
+		ProdutoConnection connection = new MySqlProdute();
+		return connection;
+		
 	}
+	
+//	public  Connection (){
+//		try {
+//			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+//			return DriverManager.getConnection("jdbc:mysql://localhost/biblioteca","root","root");
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new RuntimeException();
+//		}
+//	}
 }

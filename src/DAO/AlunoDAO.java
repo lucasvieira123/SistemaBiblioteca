@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import jdbc.ConnectionFactory;
 import jdbc.ConnectionMySql;
 import model.AluguelLivro;
 import model.Aluno;
@@ -30,7 +31,8 @@ public class AlunoDAO {
 	private List<String> atributos = new ArrayList<>();
 	
 	public AlunoDAO(){
-		this.conexao =  ConnectionMySql.getInstance().getConnection();
+		ConnectionFactory connectionFactory = ConnectionMySql.getInstance();
+		this.conexao = (Connection) connectionFactory.getProduto().getConnection();
 		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
 
 		String nomeDoMetodoAtual;

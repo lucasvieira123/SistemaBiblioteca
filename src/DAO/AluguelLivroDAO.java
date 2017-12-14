@@ -34,8 +34,8 @@ public class AluguelLivroDAO {
 	private List<String> atributos = new ArrayList<>();
 	
 	public AluguelLivroDAO(){
-		ConnectionMySql connectionMySql = ConnectionMySql.getInstance();
-		this.conexao = connectionMySql.getConnection();
+		ConnectionFactory connectionFactory = ConnectionMySql.getInstance();
+		this.conexao = (Connection) connectionFactory.getProduto().getConnection();
 		
 		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
 
