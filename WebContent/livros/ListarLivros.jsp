@@ -39,7 +39,7 @@
 
 <td>
 <form action="/SistemaBiblioteca/sistema" method="get">
-<input type="hidden" name="acao" value="removerLivro">
+<input type="hidden" name="acao" value="RemoverLivro">
 <input type="hidden" name="codigo" value="${livro.codigo}"/>
 <input type="submit" value="Remover-"></input>
 </form>

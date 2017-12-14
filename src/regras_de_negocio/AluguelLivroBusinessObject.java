@@ -13,7 +13,6 @@ public class AluguelLivroBusinessObject {
 		LivroDAO livroDAO = new LivroDAO();
 		Livro livro = livroDAO.getLivro(codigoLivro);
 		
-
 		if (livro.getQuantidadeExemplares() <= 0.0) {
 			return true;
 		} else {
@@ -21,7 +20,6 @@ public class AluguelLivroBusinessObject {
 		}
 
 	}
-	
 	
 	
 	public static long calcular(AluguelLivro aluguelLivroRegistro) {

@@ -27,7 +27,7 @@ public class AluguelLivroDAO {
 	private static String NOME_TABELA;
 	private ConnectorFactory fConnecor = ConnectorFactory.getInstance("mariadb");
 	private ProductConnector pConnector = fConnecor.getConnector(
-				"jdbc:mysql://localhost/biblioteca", "root", "admin"
+				"jdbc:mysql://localhost/biblioteca", "root", "root"
 			);
 	
 	

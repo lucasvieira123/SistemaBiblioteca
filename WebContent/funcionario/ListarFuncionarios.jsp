@@ -22,8 +22,20 @@
 <tr>
 <td>${funcionario.id}</td>
 <td>${funcionario.nome}</td>
-<td>Alterar</td>
-<td>Remover</td>
+<td>
+<form action="/SistemaBiblioteca/funcionario/alterarFuncionario.jsp" method="get">
+<input type="hidden" name="id" value="${funcionario.id}"/>
+<input type="hidden" name="nome" value="${funcionario.nome}"/>
+<input type="submit" value="Alterar*"></input>
+</form>
+</td>
+<td>
+<form action="/SistemaBiblioteca/sistema" method="get">
+<input type="hidden" name="acao" value="RemoverFuncionario">
+<input type="hidden" name="id" value="${funcionario.id}"/>
+<input type="submit" value="Remover-"></input>
+</form>
+</td>
 </tr>
 </c:forEach>
 
@@ -32,6 +44,8 @@
 <!-- <a href="">Adicionar +</a> -->
 </br>
 </br>
+
+	<a href="/SistemaBiblioteca/funcionario/adicionarFuncionario.jsp">Adicionar +</a> </br></br>
 	
 	<a href="/SistemaBiblioteca/sistema?acao=VoltarMenu"> <<<<< voltar</a>
 	

@@ -22,11 +22,14 @@ public class AlterarLivro implements FuncionalidadesStrategy{
 		String autor = "";
 		String edicao = "";
 		String editora = "";
+		String quantidade = "";
 
 		nome = request.getParameter("nome");
 		autor = request.getParameter("autor");
 		edicao = request.getParameter("edicao");
 		editora = request.getParameter("editora");
+		quantidade = request.getParameter("quantidadeExemplares");
+		
 
 		Livro livro = new Livro();
 
@@ -35,6 +38,7 @@ public class AlterarLivro implements FuncionalidadesStrategy{
 		livro.setEditora(editora);
 		livro.setNome(nome);
 		livro.setCodigo(codigo);
+		livro.setQuantidadeExemplares(Integer.parseInt(quantidade));
 
 		LivroDAO livroDAO = new LivroDAO();
 

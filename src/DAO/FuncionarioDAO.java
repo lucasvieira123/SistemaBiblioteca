@@ -23,7 +23,7 @@ public class FuncionarioDAO {
 	private static String NOME_TABELA;
 	private ConnectorFactory fConnecor = ConnectorFactory.getInstance("mariadb");
 	private ProductConnector pConnector = fConnecor.getConnector(
-				"jdbc:mysql://localhost/biblioteca", "root", "admin"
+				"jdbc:mysql://localhost/biblioteca", "root", "root"
 			);
 	
 	
@@ -180,7 +180,7 @@ public void deletar (Funcionario funcionario) {
 		try {
 			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
 			
-			preparedStatement.setLong(0, id);
+			preparedStatement.setLong(1, id);
 			
 			preparedStatement.execute();
 			preparedStatement.close();
@@ -217,5 +217,31 @@ public void deletar (Funcionario funcionario) {
 	}
 	
 	
+	public Funcionario getFuncionario (Long id) {
+		try {
+			PreparedStatement stmt = conexao.prepareStatement("select * from "+NOME_TABELA +" "
+					+ "where id= ?");
+			
+			stmt.setLong(1, id);
+			
+			ResultSet result = stmt.executeQuery();
+			Funcionario funcionario = null;
+			
+			result.next();
+				funcionario = new Funcionario();
+				
+				funcionario.setId(result.getLong("id"));
+				funcionario.setNome(result.getString("nome"));
+				
+				return funcionario;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
+		return null;
+	
+	
 	
 }
+	}
