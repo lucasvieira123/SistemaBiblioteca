@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import jdbc.ConnectionFactory;
-import jdbc.ConnectionMySql;
+import jdbc.ConnectorFactory;
+import jdbc.MySQLConnectorFactory;
+import jdbc.ProductConnector;
 import model.AluguelLivro;
 import model.Aluno;
 import model.Funcionario;
@@ -21,7 +22,10 @@ import model.Funcionario;
 public class AlunoDAO {
 	private Connection conexao;
 	private static String NOME_TABELA;
-	
+	private ConnectorFactory fConnecor = ConnectorFactory.getInstance("mariadb");
+	private ProductConnector pConnector = fConnecor.getConnector(
+				"jdbc:mysql://localhost/biblioteca", "root", "admin"
+			);
 	
 	
 	private Class classe = Aluno.class;
@@ -31,8 +35,8 @@ public class AlunoDAO {
 	private List<String> atributos = new ArrayList<>();
 	
 	public AlunoDAO(){
-		ConnectionFactory connectionFactory = ConnectionMySql.getInstance();
-		this.conexao = (Connection) connectionFactory.getProduto().getConnection();
+		ConnectorFactory connectionFactory = MySQLConnectorFactory.getInstance();
+		this.conexao = pConnector.getConnection();
 		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
 
 		String nomeDoMetodoAtual;
