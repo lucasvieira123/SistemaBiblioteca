@@ -29,8 +29,6 @@ public class LivroDAO {
 				"jdbc:mysql://localhost/biblioteca", "root", "root"
 			);
 
-	private Class classe = Livro.class;
-	private Method[] metodos = classe.getDeclaredMethods();
 
 	private List<Method> metodosComGet = new ArrayList<>();
 	private List<String> atributos = new ArrayList<>();
@@ -38,24 +36,11 @@ public class LivroDAO {
 	public LivroDAO() {
 		ConnectorFactory connectionFactory = MySQLConnectorFactory.getInstance();
 		this.conexao = pConnector.getConnection();
-		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
-
-		String nomeDoMetodoAtual;
-		for (int j = 0; j < metodos.length; j++) {
-			nomeDoMetodoAtual = metodos[j].getName();
-
-			if (nomeDoMetodoAtual.contains("get")) {
-				metodosComGet.add(metodos[j]);
-			}
-		}
-
-		String nomeAtributo = "";
-		for (int i = 0; i < metodosComGet.size(); i++) {
-			nomeAtributo = metodosComGet.get(i).getName();
-			nomeAtributo = nomeAtributo.replace("get", "");
-			nomeAtributo = nomeAtributo.toLowerCase();
-			atributos.add(nomeAtributo);
-		}
+		
+		ExtrattorFacade extratorFacede = new ExtrattorFacade(Livro.class);
+		atributos = extratorFacede.getAtributos();
+		metodosComGet = extratorFacede.getMetodosComGet();
+		NOME_TABELA = extratorFacede.getNomeClasse();
 
 	}
 

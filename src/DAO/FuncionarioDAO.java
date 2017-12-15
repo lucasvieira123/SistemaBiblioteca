@@ -27,33 +27,22 @@ public class FuncionarioDAO {
 			);
 	
 	
-	private Class classe = Funcionario.class;
-	private Method[] metodos =  classe.getDeclaredMethods();
-	
-	private List<Method> metodosComGet = new ArrayList<>();
 	private List<String> atributos = new ArrayList<>();
+	private List<Method> metodosComGet = new ArrayList<>();
 	
 	public FuncionarioDAO(){
+		
+		ExtrattorFacade extratorFacede = new ExtrattorFacade(Funcionario.class);
+		atributos = extratorFacede.getAtributos();
+		metodosComGet = extratorFacede.getMetodosComGet();
+		NOME_TABELA = extratorFacede.getNomeClasse();
+		
+		
 		ConnectorFactory connectionFactory = MySQLConnectorFactory.getInstance();
 		this.conexao = pConnector.getConnection();
-		this.NOME_TABELA = classe.getSimpleName().toLowerCase();
-
-		String nomeDoMetodoAtual;
-		for(int j =0; j<metodos.length; j++ ) {
-			 nomeDoMetodoAtual = metodos[j].getName();
-			 
-			 if(nomeDoMetodoAtual.contains("get")) {
-				 metodosComGet.add(metodos[j]);
-			 }
-		}
 		
-		String nomeAtributo ="";
-		for(int i =0 ; i< metodosComGet.size(); i++) {
-		 nomeAtributo = metodosComGet.get(i).getName();
-			nomeAtributo = nomeAtributo.replace("get", "");
-			nomeAtributo = nomeAtributo.toLowerCase();
-			atributos.add(nomeAtributo);
-		}
+		
+
 		
 	}
 	
@@ -193,6 +182,7 @@ public void deletar (Funcionario funcionario) {
 		
 	}
 	
+
 	public List<Funcionario> getLista() {
 		List<Funcionario> funcionarios = new ArrayList<>();
 		try {
@@ -241,7 +231,7 @@ public void deletar (Funcionario funcionario) {
 	}
 		return null;
 	
-	
-	
 }
+	
+	
 	}
