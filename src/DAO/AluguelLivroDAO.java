@@ -98,7 +98,6 @@ public void salvar(AluguelLivro aluguelLivro){
 	
 	sql =sql.concat(values);
 		
-		
 		try {
 			PreparedStatement preparedStatement = conexao.prepareStatement(sql);
 			
