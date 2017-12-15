@@ -31,7 +31,8 @@
 <td>${livro.editora}</td>
 <td>${livro.quantidadeExemplares}
 <td>
-<form action="/SistemaBiblioteca/livros/atualizarLivro.jsp" method="get">
+<form action="/SistemaBiblioteca/sistema" method="get">
+<input type="hidden" name="acao" value="ChamarTelaAtualizarLivro">
 <input type="hidden" name="codigo" value="${livro.codigo}"/>
 <input type="submit" value="Alterar*"></input>
 </form>
@@ -48,13 +49,13 @@
 </c:forEach>
 </table>
 
-<!-- <a href="/SistemaBiblioteca/livros/adicionarLivro.html">Adicionar +</a> -->
+<a href="/SistemaBiblioteca/sistema?acao=ChamarTelaAdicionarLivro">Adicionar +</a> 
 
 
 </br>
 </br>
 	
-	<a href="/SistemaBiblioteca/sistema?acao=VoltarMenu"> <<<<< voltar</a>
+<a href="/SistemaBiblioteca/sistema?acao=VoltarMenu"> <<<<< voltar</a>
 	
 	
 </body>

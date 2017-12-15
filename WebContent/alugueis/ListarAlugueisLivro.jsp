@@ -38,7 +38,8 @@
 
 
 <td>
-	<form action="/SistemaBiblioteca/alugueis/atualizarAluguel.jsp" method="get">
+	<form action="/SistemaBiblioteca/sistema" method="get">
+	<input type="hidden" name="acao" value="ChamarTelaAtualizarAluguel"/>
 <input type="hidden" name="codigo" value="${aluguel.codigo}"/>
 <input type="submit" value="Alterar*"></input>
 </form>

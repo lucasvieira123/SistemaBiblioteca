@@ -34,7 +34,7 @@ public class ServletController extends HttpServlet {
 			Class classe = Class.forName(nomeDaclasse);
 			Object obg = classe.newInstance();
 			FuncionalidadesStrategy funcionalidadesStrategy = (FuncionalidadesStrategy)obg;
-			funcionalidadesStrategy.executaFuncionalida(request, response);
+			funcionalidadesStrategy.executaFuncionalida(request,  response);
 			
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();

@@ -41,7 +41,6 @@ public class LivroDAO {
 		atributos = extratorFacede.getAtributos();
 		metodosComGet = extratorFacede.getMetodosComGet();
 		NOME_TABELA = extratorFacede.getNomeClasse();
-
 	}
 
 	public void salvar(Livro livro) {

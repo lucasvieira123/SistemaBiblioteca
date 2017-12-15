@@ -31,7 +31,8 @@
 	<td> <button type="submit" value="">Remover -</button> </td>
 </form>
 
-<form action="aluno/AlterarAluno.jsp" method="get">
+<form action="sistema" method="get">
+ <input type="hidden" name="acao" value="ChamarTelaAlterarAluno"/>
 <input type="hidden" name="matricula" value="${aluno.matricula}"/>
 	<td> <button type="submit">Alterar *</button></td> 
 </form>

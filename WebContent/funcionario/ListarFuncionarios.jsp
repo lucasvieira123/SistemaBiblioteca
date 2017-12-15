@@ -23,7 +23,8 @@
 <td>${funcionario.id}</td>
 <td>${funcionario.nome}</td>
 <td>
-<form action="/SistemaBiblioteca/funcionario/alterarFuncionario.jsp" method="get">
+<form action="/SistemaBiblioteca/sistema" method="get">
+<input type="hidden" name="acao" value="ChamarTelaAlterarFuncionario"/>
 <input type="hidden" name="id" value="${funcionario.id}"/>
 <input type="hidden" name="nome" value="${funcionario.nome}"/>
 <input type="submit" value="Alterar*"></input>
